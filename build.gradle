@@ -23,7 +23,8 @@ javaPackager {
 	generateInstaller = false
 	additionalResources = [ file('info.txt') ] 
 	bundleJre = true
-	platform = 'windows'
+	platform = 'linux'
+	jdkPath = file('C:/Program Files/AdoptOpenJDK/jdk-11.0.8+10-linux') 
 	winConfig {
 		headerType = 'gui'
 	}
