@@ -4,11 +4,6 @@ plugins {
     id 'io.github.fvarrui.javapackager.plugin' version '1.2.0-SNAPSHOT'
 }
 
-repositories {
-	mavenLocal()
-	mavenCentral()
-}
-
 dependencies {
     implementation 'commons-io:commons-io:2.6'
 }
@@ -17,64 +12,46 @@ group = 'io.github.fvarrui'
 version = '1.0.0'
 description = 'HelloWorld for Gradle' 
 sourceCompatibility = '1.8'
+compileJava.options.encoding = 'UTF-8'
 
-javaPackager {
+task packageForWindows(type: io.github.fvarrui.javapackager.gradle.PackageTask, dependsOn: build) {
+	description = 'Packages the application as a native Windows executable and bundles it in a zipball'
+	platform = 'windows'
 	mainClass = 'io.github.fvarrui.helloworld.Main'
-	generateInstaller = false
-	additionalResources = [ file('info.txt') ] 
-	bundleJre = true
-	platform = 'linux'
-	jdkPath = file('C:/Program Files/AdoptOpenJDK/jdk-11.0.8+10-linux') 
 	winConfig {
 		headerType = 'gui'
 	}
 	createZipball = true
+	mainClass = 'io.github.fvarrui.helloworld.Main'
+	generateInstaller = true
+	additionalResources = [ file('info.txt') ] 
+	bundleJre = true
+}
+
+task packageForLinux(type: io.github.fvarrui.javapackager.gradle.PackageTask, dependsOn: build) {
+	description = 'Packages the application as a native GNU/Linux executable and bundles it in a zipball'
+	platform = 'linux'
 	createTarball = true
+	jdkPath = file('C:/Program Files/AdoptOpenJDK/jdk-11.0.8+10-linux')
+	mainClass = 'io.github.fvarrui.helloworld.Main'
+	generateInstaller = false
+	additionalResources = [ file('info.txt') ] 
+	bundleJre = true
 }
 
-//task packageForWindows(type: io.github.fvarrui.javapackager.gradle.PackageTask) {
-//	description = 'Packages the application as a native Windows executable and bundles it in a zipball'
-//	javaPackager {
-//		platform = 'windows'
-//		winConfig {
-//			headerType = 'gui'
-//		}
-//		createZipball = true
-//	}
-//}
-//
-//task packageForLinux(type: io.github.fvarrui.javapackager.gradle.PackageTask) {
-//	description = 'Packages the application as a native GNU/Linux executable and bundles it in a zipball'
-//	javaPackager {
-//		platform = 'linux'
-//		createTarball = true
-//		jdkPath = file('C:\\Users\\fvarrui\\GitHub\\jdks\\adoptopenjdk\\jdk-13.0.2+8-linux')
-//	}
-//}
-//
-//task packageForMac(type: io.github.fvarrui.javapackager.gradle.PackageTask) {
-//	description = 'Packages the application as a native Mac OS app and bundles it in a zipball'
-//	javaPackager {
-//		platform = 'mac'
-//		createTarball = true
-//		jdkPath = file('C:\\Users\\fvarrui\\GitHub\\jdks\\adoptopenjdk\\jdk-13.0.2+8-mac')
-//	}
-//}
-//
-//task packageForAllPlatforms(dependsOn: [ packageForWindows, packageForMac, packageForLinux ]) {
-//	description = 'Packages the application for all platforms'
-//	group = 'JavaPackager'
-//}
-
-publishing {
-	publications {
-        maven(MavenPublication) {
-            from(components.java)
-        }
-    }
+task packageForMac(type: io.github.fvarrui.javapackager.gradle.PackageTask, dependsOn: build) {
+	description = 'Packages the application as a native Mac OS app and bundles it in a zipball'
+	platform = 'mac'
+	createTarball = true
+	jdkPath = file('C:/Program Files/AdoptOpenJDK/jdk-11.0.8+10-mac')
+	mainClass = 'io.github.fvarrui.helloworld.Main'
+	generateInstaller = false
+	additionalResources = [ file('info.txt') ] 
+	bundleJre = true
 }
 
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
+task packageForAllPlatforms(dependsOn: [ packageForWindows, packageForMac, packageForLinux ]) {
+	description = 'Packages the application for all platforms'
+	group = 'JavaPackager'
 }
 
