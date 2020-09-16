@@ -1,8 +1,19 @@
+buildscript {
+	repositories {
+        mavenCentral()
+	}
+	dependencies {
+		classpath 'io.github.fvarrui:javapackager:1.2.0'
+	}
+}
+
 plugins {
     id 'java'
     id 'maven-publish'
-    id 'io.github.fvarrui.javapackager.plugin' version '1.2.0-SNAPSHOT'
 }
+
+apply plugin: 'io.github.fvarrui.javapackager.plugin'
+
 
 dependencies {
     implementation 'commons-io:commons-io:2.6'
@@ -43,7 +54,7 @@ task packageForMac(type: io.github.fvarrui.javapackager.gradle.PackageTask, depe
 	description = 'Packages the application as a native Mac OS app and bundles it in a zipball'
 	platform = 'mac'
 	createTarball = true
-	jdkPath = file('C:/Program Files/AdoptOpenJDK/jdk-11.0.8+10-mac')
+	jdkPath = file('C:/Program Files/AdoptOpenJDK/jdk-11.0.8+10-mac/Contents/Home')
 	mainClass = 'io.github.fvarrui.helloworld.Main'
 	generateInstaller = false
 	additionalResources = [ file('info.txt') ] 
