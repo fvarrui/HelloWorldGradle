@@ -27,15 +27,19 @@ compileJava.options.encoding = 'UTF-8'
 javapackager {
 	mainClass = 'io.github.fvarrui.helloworld.Main'
 	generateInstaller = false
-	additionalResources = [ file('info.txt'), file('plugins') ]
+	additionalResources = [ file('src/main/resources/info.txt'), file('plugins') ]
 	bundleJre = true
 	classpath = 'plugins/*'
+	//useResourcesAsWorkingDir = false
 }
 
 task packageForWindows(type: io.github.fvarrui.javapackager.gradle.PackageTask, dependsOn: build) {
 	description = 'Packages the application as a native Windows executable and bundles it in a zipball'
 	platform = 'windows'
 	createZipball = true
+	winConfig {
+		headerType = 'console'
+	}
 }
 
 task packageForLinux(type: io.github.fvarrui.javapackager.gradle.PackageTask, dependsOn: build) {
