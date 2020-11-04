@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
 	}
 	dependencies {
-		classpath 'io.github.fvarrui:javapackager:1.2.1-SNAPSHOT'
+		classpath 'io.github.fvarrui:javapackager:1.4.0-SNAPSHOT'
 	}
 }
 
@@ -26,31 +26,27 @@ compileJava.options.encoding = 'UTF-8'
 
 javapackager {
 	mainClass = 'io.github.fvarrui.helloworld.Main'
-	generateInstaller = true
-	additionalResources = [ file('info.txt') ]
+	generateInstaller = false
+	additionalResources = [ file('info.txt'), file('plugins') ]
 	bundleJre = true
+	classpath = 'plugins/*'
 }
 
 task packageForWindows(type: io.github.fvarrui.javapackager.gradle.PackageTask, dependsOn: build) {
 	description = 'Packages the application as a native Windows executable and bundles it in a zipball'
 	platform = 'windows'
-	winConfig {
-		headerType = 'gui'
-	}
 	createZipball = true
 }
 
 task packageForLinux(type: io.github.fvarrui.javapackager.gradle.PackageTask, dependsOn: build) {
 	description = 'Packages the application as a native GNU/Linux executable and bundles it in a zipball'
 	platform = 'linux'
-	jdkPath = file('C:/Program Files/AdoptOpenJDK/jdk-11.0.8+10-linux')
 	createTarball = true
 }
 
 task packageForMac(type: io.github.fvarrui.javapackager.gradle.PackageTask, dependsOn: build) {
 	description = 'Packages the application as a native Mac OS app and bundles it in a zipball'
 	platform = 'mac'
-	jdkPath = file('C:/Program Files/AdoptOpenJDK/jdk-11.0.8+10-mac/Contents/Home')
 	createTarball = true
 }
 
