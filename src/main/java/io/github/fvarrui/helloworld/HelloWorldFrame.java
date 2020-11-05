@@ -4,13 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 import javax.imageio.ImageIO;
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
@@ -74,6 +71,7 @@ public class HelloWorldFrame extends JFrame {
 	public static void main(String[] args) {
 		System.out.println("Starting app ... ");
 		System.out.println("PATH=" + System.getenv("PATH"));
+		System.out.println("PATH=" + System.getProperty("user.dir"));
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 try {
