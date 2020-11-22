@@ -71,7 +71,6 @@ public class HelloWorldFrame extends JFrame {
 	public static void main(String[] args) {
 		System.out.println("Starting app ... ");
 		System.out.println("PATH=" + System.getenv("PATH"));
-		System.out.println("PATH=" + System.getProperty("user.dir"));
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 try {

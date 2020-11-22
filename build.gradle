@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
 	}
 	dependencies {
-		classpath 'io.github.fvarrui:javapackager:1.4.0-SNAPSHOT'
+		classpath 'io.github.fvarrui:javapackager:1.4.2-SNAPSHOT'
 	}
 }
 
@@ -26,32 +26,28 @@ compileJava.options.encoding = 'UTF-8'
 
 javapackager {
 	mainClass = 'io.github.fvarrui.helloworld.Main'
+	additionalResources = [ file('src/main/resources/info.txt') ]
+	bundleJre = false
 	generateInstaller = false
-	additionalResources = [ file('src/main/resources/info.txt'), file('plugins') ]
-	bundleJre = true
-	classpath = 'plugins/*'
-	//useResourcesAsWorkingDir = false
+	jreMinVersion = '1.8.0'
 }
 
 task packageForWindows(type: io.github.fvarrui.javapackager.gradle.PackageTask, dependsOn: build) {
 	description = 'Packages the application as a native Windows executable and bundles it in a zipball'
 	platform = 'windows'
-	createZipball = true
-	winConfig {
-		headerType = 'console'
-	}
+	createZipball = false
 }
 
 task packageForLinux(type: io.github.fvarrui.javapackager.gradle.PackageTask, dependsOn: build) {
-	description = 'Packages the application as a native GNU/Linux executable and bundles it in a zipball'
+	description = 'Packages the application as a native GNU/Linux executable and bundles it in a tarball'
 	platform = 'linux'
-	createTarball = true
+	createTarball = false
 }
 
 task packageForMac(type: io.github.fvarrui.javapackager.gradle.PackageTask, dependsOn: build) {
-	description = 'Packages the application as a native Mac OS app and bundles it in a zipball'
+	description = 'Packages the application as a native Mac OS app and bundles it in a tarball'
 	platform = 'mac'
-	createTarball = true
+	createTarball = false
 }
 
 task packageForAllPlatforms(dependsOn: [ packageForWindows, packageForMac, packageForLinux ]) {
