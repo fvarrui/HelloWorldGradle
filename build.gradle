@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
 	}
 	dependencies {
-		classpath 'io.github.fvarrui:javapackager:1.4.2-SNAPSHOT'
+		classpath 'io.github.fvarrui:javapackager:1.5.2-SNAPSHOT'
 	}
 }
 
@@ -29,7 +29,6 @@ javapackager {
 	additionalResources = [ file('src/main/resources/info.txt') ]
 	bundleJre = false
 	generateInstaller = false
-	jreMinVersion = '1.8.0'
 }
 
 task packageForWindows(type: io.github.fvarrui.javapackager.gradle.PackageTask, dependsOn: build) {
