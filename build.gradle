@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
 	}
 	dependencies {
-		classpath 'io.github.fvarrui:javapackager:1.5.2-SNAPSHOT'
+		classpath 'io.github.fvarrui:javapackager:1.6.0-SNAPSHOT'
 	}
 }
 
@@ -18,6 +18,9 @@ dependencies {
     implementation 'commons-io:commons-io:2.6'
 }
 
+import io.github.fvarrui.javapackager.gradle.PackageTask;
+import io.github.fvarrui.javapackager.model.*;
+
 group = 'io.github.fvarrui'
 version = '1.0.0'
 description = 'HelloWorld for Gradle'
@@ -27,23 +30,36 @@ compileJava.options.encoding = 'UTF-8'
 javapackager {
 	mainClass = 'io.github.fvarrui.helloworld.Main'
 	additionalResources = [ file('src/main/resources/info.txt') ]
-	bundleJre = false
+	bundleJre = true
 	generateInstaller = false
 }
 
-task packageForWindows(type: io.github.fvarrui.javapackager.gradle.PackageTask, dependsOn: build) {
+task packageForWindows(type: PackageTask, dependsOn: build) {
 	description = 'Packages the application as a native Windows executable and bundles it in a zipball'
 	platform = 'windows'
 	createZipball = false
+	additionalModulePaths = [ file('src') ]
+	winConfig {
+		registry = new Registry([
+			entries: [
+					new RegistryEntry([
+						key: "HKCU:MyGradleApp",		
+						valueName: "greeting",		
+						valueType: ValueType.REG_SZ,		
+						valueData: "hello"
+					])
+				]
+			])
+	}
 }
 
-task packageForLinux(type: io.github.fvarrui.javapackager.gradle.PackageTask, dependsOn: build) {
+task packageForLinux(type: PackageTask, dependsOn: build) {
 	description = 'Packages the application as a native GNU/Linux executable and bundles it in a tarball'
 	platform = 'linux'
 	createTarball = false
 }
 
-task packageForMac(type: io.github.fvarrui.javapackager.gradle.PackageTask, dependsOn: build) {
+task packageForMac(type: PackageTask, dependsOn: build) {
 	description = 'Packages the application as a native Mac OS app and bundles it in a tarball'
 	platform = 'mac'
 	createTarball = false
