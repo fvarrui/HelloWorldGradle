@@ -5,6 +5,10 @@ import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -16,6 +20,8 @@ import org.apache.commons.io.FileUtils;
 
 @SuppressWarnings("serial")
 public class HelloWorldFrame extends JFrame {
+	
+	private static String [] args;
 
 	public HelloWorldFrame() throws IOException {
 		super("Hello World");
@@ -41,11 +47,19 @@ public class HelloWorldFrame extends JFrame {
         StringBuffer buffer = new StringBuffer();
         buffer.append("Additional resource: " + info + "\n");
         buffer.append("Content: " + content + "\n\n");
-        
+
+        buffer.append("==============================================\n");
+        buffer.append("ARGUMENTS ====================================\n");
+        buffer.append("==============================================\n\n");
+        buffer.append("args=" + Arrays.asList(args) + "\n");        
+        buffer.append("\n");
+
         buffer.append("==============================================\n");
         buffer.append("ENVIRONMENT VARIABLES ========================\n");
         buffer.append("==============================================\n\n");
-        for (String key : System.getenv().keySet()) {
+        List<String> envKeys = System.getenv().keySet().stream().collect(Collectors.toList());
+        Collections.sort(envKeys, (a, b) -> a.compareTo(b));
+        for (String key : envKeys) {
 	        buffer.append(key + "=" + System.getenv(key) + "\n");
         }
         buffer.append("\n");
@@ -53,7 +67,9 @@ public class HelloWorldFrame extends JFrame {
         buffer.append("==============================================\n");
         buffer.append("PROPERTIES ===================================\n");
         buffer.append("==============================================\n\n");
-        for (Object key : System.getProperties().keySet()) {
+        List<Object> propKeys = System.getProperties().keySet().stream().collect(Collectors.toList());
+        Collections.sort(propKeys, (a, b) -> a.toString().compareTo(b.toString()));
+        for (Object key : propKeys) {
 	        buffer.append(key + "=" + System.getProperty("" + key) + "\n");
         }
         
@@ -74,6 +90,7 @@ public class HelloWorldFrame extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 try {
+                	HelloWorldFrame.args = args;
 					new HelloWorldFrame();
 				} catch (IOException e) {
 					e.printStackTrace();
