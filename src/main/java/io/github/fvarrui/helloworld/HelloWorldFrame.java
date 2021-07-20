@@ -1,7 +1,9 @@
 package io.github.fvarrui.helloworld;
 
 import java.awt.BorderLayout;
+import java.awt.Desktop;
 import java.awt.Font;
+import java.awt.desktop.OpenFilesEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -85,6 +87,16 @@ public class HelloWorldFrame extends JFrame {
 	}
 	
 	public static void main(String[] args) {
+		
+        if (System.getProperty("os.name").contains("OS X")){
+        	Desktop.getDesktop().setOpenFileHandler((OpenFilesEvent e) -> {
+        		File f = e.getFiles().stream().findFirst().get();
+        		HelloWorldFrame.args = new String [] { f.getAbsolutePath() };
+        	});
+        } else {
+        	HelloWorldFrame.args = args;        	
+        }
+		
 		System.out.println("Starting app ... ");
 		System.out.println("PATH=" + System.getenv("PATH"));
         SwingUtilities.invokeLater(new Runnable() {
