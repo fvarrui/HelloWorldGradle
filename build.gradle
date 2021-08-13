@@ -56,7 +56,11 @@ task packageForWindows(type: PackageTask, dependsOn: build) {
 task packageForLinux(type: PackageTask, dependsOn: build) {
 	description = 'Packages the application as a native GNU/Linux executable and bundles it in a tarball'
 	platform = 'linux'
+	bundleJre = true
 	createTarball = false
+	linuxConfig {
+		wrapJar = false
+	}
 }
 
 task packageForMac(type: PackageTask, dependsOn: build) {
