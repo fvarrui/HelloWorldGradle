@@ -58,9 +58,7 @@ task packageForLinux(type: PackageTask, dependsOn: build) {
 	platform = 'linux'
 	bundleJre = true
 	createTarball = false
-	linuxConfig {
-		wrapJar = false
-	}
+	generateInstaller = true
 }
 
 task packageForMac(type: PackageTask, dependsOn: build) {
