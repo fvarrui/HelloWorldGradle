@@ -65,9 +65,7 @@ task packageForMac(type: PackageTask, dependsOn: build) {
 	description = 'Packages the application as a native Mac OS app and bundles it in a tarball'
 	platform = 'mac'
 	createTarball = true
-	scritps {
-		bootstrap = file('assets/mac/bootstrap.sh')
-	}
+	scripts.bootstrap = file('assets/mac/bootstrap.sh')
 }
 
 task packageForAllPlatforms(dependsOn: [ packageForWindows, packageForMac, packageForLinux ]) {
