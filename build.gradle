@@ -31,7 +31,7 @@ javapackager {
 	mainClass = 'io.github.fvarrui.helloworld.Main'
 	additionalResources = [ file('src/main/resources/info.txt') ]
 	bundleJre = true
-	generateInstaller = false
+	generateInstaller = true
 }
 
 task packageForWindows(type: PackageTask, dependsOn: build) {
@@ -64,7 +64,8 @@ task packageForLinux(type: PackageTask, dependsOn: build) {
 task packageForMac(type: PackageTask, dependsOn: build) {
 	description = 'Packages the application as a native Mac OS app and bundles it in a tarball'
 	platform = 'mac'
-	createTarball = false
+	createTarball = true
+	scritps.bootstrap = file('assets/mac/bootstrap.sh');
 }
 
 task packageForAllPlatforms(dependsOn: [ packageForWindows, packageForMac, packageForLinux ]) {
