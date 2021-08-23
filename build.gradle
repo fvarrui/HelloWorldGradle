@@ -32,6 +32,9 @@ javapackager {
 	additionalResources = [ file('src/main/resources/info.txt') ]
 	bundleJre = true
 	generateInstaller = true
+	scripts {
+		bootstrap = file('assets/bootstrap.sh')
+	}
 }
 
 task packageForWindows(type: PackageTask, dependsOn: build) {
@@ -57,17 +60,14 @@ task packageForLinux(type: PackageTask, dependsOn: build) {
 	description = 'Packages the application as a native GNU/Linux executable and bundles it in a tarball'
 	platform = 'linux'
 	bundleJre = true
-	createTarball = false
-	generateInstaller = true
+	createTarball = true
+	generateInstaller = false
 }
 
 task packageForMac(type: PackageTask, dependsOn: build) {
 	description = 'Packages the application as a native Mac OS app and bundles it in a tarball'
 	platform = 'mac'
 	createTarball = true
-	scripts {
-		bootstrap = file('assets/mac/bootstrap.sh')
-	}
 }
 
 task packageForAllPlatforms(dependsOn: [ packageForWindows, packageForMac, packageForLinux ]) {
