@@ -32,9 +32,6 @@ javapackager {
 	additionalResources = [ file('src/main/resources/info.txt') ]
 	bundleJre = true
 	generateInstaller = true
-	scripts {
-		bootstrap = file('assets/bootstrap.sh')
-	}
 }
 
 task packageForWindows(type: PackageTask, dependsOn: build) {
@@ -42,7 +39,12 @@ task packageForWindows(type: PackageTask, dependsOn: build) {
 	platform = 'windows'
 	createZipball = false
 	additionalModulePaths = [ file('src') ]
+	bundleJre = true
 	winConfig {
+		headerType = 'console'
+		generateSetup = true
+		generateMsm = true
+		generateMsi = true
 		registry = new Registry([
 			entries: [
 					new RegistryEntry([
@@ -54,6 +56,9 @@ task packageForWindows(type: PackageTask, dependsOn: build) {
 				]
 			])
 	}
+	scripts {
+		// bootstrap = file('assets/windows/script.bat')
+	}
 }
 
 task packageForLinux(type: PackageTask, dependsOn: build) {
@@ -62,12 +67,18 @@ task packageForLinux(type: PackageTask, dependsOn: build) {
 	bundleJre = true
 	createTarball = true
 	generateInstaller = false
+	scripts {
+		bootstrap = file('assets/bootstrap.sh')
+	}
 }
 
 task packageForMac(type: PackageTask, dependsOn: build) {
 	description = 'Packages the application as a native Mac OS app and bundles it in a tarball'
 	platform = 'mac'
 	createTarball = true
+	scripts {
+		bootstrap = file('assets/bootstrap.sh')
+	}
 }
 
 task packageForAllPlatforms(dependsOn: [ packageForWindows, packageForMac, packageForLinux ]) {
