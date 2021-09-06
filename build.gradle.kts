@@ -70,31 +70,30 @@ tasks.register<PackageTask>("packageForWindows") {
 	dependsOn(tasks.build)
 }
 
-/* 
-
-task packageForLinux(type: PackageTask, dependsOn: build) {
-	description = 'Packages the application as a native GNU/Linux executable and bundles it in a tarball'
-	platform = 'linux'
-	bundleJre = true
-	createTarball = true
-	generateInstaller = false
-	scripts {
-		bootstrap = file('assets/bootstrap.sh')
-	}
+tasks.register<PackageTask>("packageForLinux") {
+	setDescription("Packages the application as a native GNU/Linux executable and bundles it in a tarball")
+	setPlatform(Platform.linux)
+	setBundleJre(true)
+	setCreateTarball(true)
+	setGenerateInstaller(true)
+	scripts(closureOf<Scripts>({
+		setBootstrap(File("assets/bootstrap.sh"))
+	}) as Closure<Scripts>)
+	dependsOn(tasks.build)
 }
 
-task packageForMac(type: PackageTask, dependsOn: build) {
-	description = 'Packages the application as a native Mac OS app and bundles it in a tarball'
-	platform = 'mac'
-	createTarball = true
-	scripts {
-		bootstrap = file('assets/bootstrap.sh')
-	}
+tasks.register<PackageTask>("packageForMac") {
+	setDescription("Packages the application as a native Mac OS app and bundles it in a tarball")
+	setPlatform(Platform.mac)
+	setCreateTarball(true)
+	scripts(closureOf<Scripts>({
+		setBootstrap(File("assets/bootstrap.sh"))
+	}) as Closure<Scripts>)
+	dependsOn(tasks.build)
 }
 
-task packageForAllPlatforms(dependsOn: [ packageForWindows, packageForMac, packageForLinux ]) {
-	description = 'Packages the application for all platforms'
-	group = 'JavaPackager'
+tasks.register("packageForAllPlatforms") {
+	setDescription("Packages the application for all platforms")
+	setGroup("JavaPackager")
+	dependsOn(listOf("packageForWindows", "packageForLinux", "packageForMac"))
 }
-
-*/
