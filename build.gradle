@@ -3,13 +3,14 @@ buildscript {
         mavenCentral()
 	}
 	dependencies {
-		classpath 'io.github.fvarrui:javapackager:1.6.0-SNAPSHOT'
+		classpath 'io.github.fvarrui:javapackager:1.6.3'
 	}
 }
 
 plugins {
     id 'java'
     id 'maven-publish'
+	id 'com.github.ben-manes.versions' version '0.42.0'
 }
 
 apply plugin: 'io.github.fvarrui.javapackager.plugin'
@@ -32,33 +33,36 @@ javapackager {
 	additionalResources = [ file('src/main/resources/info.txt') ]
 	bundleJre = true
 	generateInstaller = true
+    vmArgs = ["-Djava.library.path=."]
+    administratorRequired = false
 }
 
 task packageForWindows(type: PackageTask, dependsOn: build) {
 	description = 'Packages the application as a native Windows executable and bundles it in a zipball'
 	platform = 'windows'
-	createZipball = false
-	additionalModulePaths = [ file('src') ]
-	bundleJre = true
 	winConfig {
-		headerType = 'console'
-		generateSetup = true
-		generateMsm = true
-		generateMsi = true
+		exeCreationTool = 'winrun4j'
+		vmArgs = ["-Dprism.maxvram=512m -XX:+UseG1GC"]
+		generateSetup = false
+		generateMsi = false
 		registry = new Registry([
 			entries: [
-					new RegistryEntry([
-						key: "HKCU:MyGradleApp",		
-						valueName: "greeting",		
-						valueType: ValueType.REG_SZ,		
-						valueData: "hello"
-					])
-				]
-			])
-	}
-	scripts {
-		// bootstrap = file('assets/windows/script.bat')
-	}
+				new RegistryEntry([
+					key: "HKCU:MyGradleApp",		
+					valueName: "greeting",		
+					valueType: ValueType.REG_SZ,		
+					valueData: "hello"
+				])
+			]
+		])
+        icoFile = file("windows/HelloWorldGradle.ico")
+        setupMode = SetupMode.askTheUser
+        removeOldLibs = true
+        disableDirPage = false
+        disableFinishedPage = false
+        disableWelcomePage = false
+        createDesktopIconTask = false
+    }
 }
 
 task packageForLinux(type: PackageTask, dependsOn: build) {
@@ -66,7 +70,6 @@ task packageForLinux(type: PackageTask, dependsOn: build) {
 	platform = 'linux'
 	bundleJre = true
 	createTarball = true
-	generateInstaller = false
 	scripts {
 		bootstrap = file('assets/bootstrap.sh')
 	}
@@ -78,6 +81,12 @@ task packageForMac(type: PackageTask, dependsOn: build) {
 	createTarball = true
 	scripts {
 		bootstrap = file('assets/bootstrap.sh')
+	}
+	macConfig {
+		infoPlist.additionalEntries = '''
+			<key>LSUIElement</key>
+			<true/>
+		'''
 	}
 }
 
