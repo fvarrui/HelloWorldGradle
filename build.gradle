@@ -3,14 +3,13 @@ buildscript {
         mavenCentral()
 	}
 	dependencies {
-		classpath 'io.github.fvarrui:javapackager:1.6.3'
+		classpath 'io.github.fvarrui:javapackager:1.6.6'
 	}
 }
 
 plugins {
     id 'java'
     id 'maven-publish'
-	id 'com.github.ben-manes.versions' version '0.42.0'
 }
 
 apply plugin: 'io.github.fvarrui.javapackager.plugin'
@@ -25,15 +24,14 @@ import io.github.fvarrui.javapackager.model.*;
 group = 'io.github.fvarrui'
 version = '1.0.0'
 description = 'HelloWorld for Gradle'
-sourceCompatibility = '1.8'
+sourceCompatibility = '9'
 compileJava.options.encoding = 'UTF-8'
 
 javapackager {
 	mainClass = 'io.github.fvarrui.helloworld.Main'
 	additionalResources = [ file('src/main/resources/info.txt') ]
 	bundleJre = true
-	generateInstaller = true
-    vmArgs = ["-Djava.library.path=."]
+	generateInstaller = false
     administratorRequired = false
 }
 
@@ -41,8 +39,8 @@ task packageForWindows(type: PackageTask, dependsOn: build) {
 	description = 'Packages the application as a native Windows executable and bundles it in a zipball'
 	platform = 'windows'
 	winConfig {
-		exeCreationTool = 'winrun4j'
-		vmArgs = ["-Dprism.maxvram=512m -XX:+UseG1GC"]
+		exeCreationTool = 'why'
+		//vmArgs = ["-Dprism.maxvram=512m -XX:+UseG1GC"]
 		generateSetup = false
 		generateMsi = false
 		registry = new Registry([
