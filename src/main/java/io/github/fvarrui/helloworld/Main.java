@@ -1,13 +1,23 @@
 package io.github.fvarrui.helloworld;
 
+import javafx.application.Application;
+
 public class Main {
+	
+	private static void version() {
+		System.out.println("HelloWorld 1.0.0");
+	}
 
 	public static void main(String[] args) {
-		if (args.length > 0 && args[0].equals("--help")) {
-			System.out.println("HelloWorld 1.0.0");
-			return;
+		if (args.length == 0) {
+			HelloWorldFrame.main(args);
 		}
-		HelloWorldFrame.main(args);
+		else if ("--javafx".equals(args[0])) {
+			Application.launch(HelloWorldApp.class, args);
+		}
+		else if ("--version".equals(args[0])) {
+			version();
+		}
 	}
 
 }
