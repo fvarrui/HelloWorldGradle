@@ -35,7 +35,7 @@ import io.github.fvarrui.javapackager.model.*;
 group = 'io.github.fvarrui'
 version = '1.0.0'
 description = 'HelloWorld for Gradle'
-sourceCompatibility = '1.8'
+sourceCompatibility = '9'
 compileJava.options.encoding = 'UTF-8'
 
 javapackager {
@@ -57,7 +57,6 @@ task packageForWindows(type: PackageTask, dependsOn: build) {
 	winConfig {
 		headerType = 'console'
 		exeCreationTool = 'launch4j'
-		//vmArgs = ["-Dprism.maxvram=512m -XX:+UseG1GC"]
 		generateSetup = false
 		generateMsi = false
 		registry = new Registry([
