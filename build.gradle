@@ -6,11 +6,7 @@ buildscript {
         }
 	}
 	dependencies {
-<<<<<<< Updated upstream
-		classpath 'io.github.fvarrui:javapackager:1.6.3'
-=======
 		classpath 'io.github.fvarrui:javapackager:1.7.5'
->>>>>>> Stashed changes
 	}
 }
 
@@ -59,14 +55,9 @@ task packageForWindows(type: PackageTask, dependsOn: build) {
             '--add-modules=javafx.graphics,javafx.controls,javafx.base',
 	]
 	winConfig {
-<<<<<<< Updated upstream
-		exeCreationTool = 'winrun4j'
-		vmArgs = ["-Dprism.maxvram=512m -XX:+UseG1GC"]
-=======
 		headerType = 'console'
 		exeCreationTool = 'launch4j'
 		//vmArgs = ["-Dprism.maxvram=512m -XX:+UseG1GC"]
->>>>>>> Stashed changes
 		generateSetup = false
 		generateMsi = false
 		registry = new Registry([
