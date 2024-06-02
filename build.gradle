@@ -1,12 +1,13 @@
 buildscript {
 	repositories {
         mavenCentral()
+		mavenLocal()
 		maven {
             url "https://oss.sonatype.org/content/repositories/snapshots"
         }
 	}
 	dependencies {
-		classpath 'io.github.fvarrui:javapackager:1.7.5'
+		classpath 'io.github.fvarrui:javapackager:1.7.6-SNAPSHOT'
 	}
 }
 
@@ -20,13 +21,12 @@ apply plugin: 'io.github.fvarrui.javapackager.plugin'
 
 dependencies {
     implementation 'commons-io:commons-io:2.6'
-    implementation 'org.openjfx:javafx-base:22'
-    implementation 'org.openjfx:javafx-base:22:win'
-    implementation 'org.openjfx:javafx-controls:22'
-    implementation 'org.openjfx:javafx-controls:22:win'
-    implementation 'org.openjfx:javafx-graphics:22'
-    implementation 'org.openjfx:javafx-graphics:22:win'
-    implementation fileTree(include: ["*.jar"], dir: "libs")
+    implementation 'org.openjfx:javafx-controls:21'
+    implementation 'org.openjfx:javafx-controls:21:win'
+    implementation 'org.openjfx:javafx-graphics:21'
+    implementation 'org.openjfx:javafx-graphics:21:win'
+    implementation 'org.openjfx:javafx-base:21'
+    implementation 'org.openjfx:javafx-base:21:win'
 }
 
 import io.github.fvarrui.javapackager.gradle.PackageTask;
@@ -35,19 +35,20 @@ import io.github.fvarrui.javapackager.model.*;
 group = 'io.github.fvarrui'
 version = '1.0.0'
 description = 'HelloWorld for Gradle'
-sourceCompatibility = '9'
+sourceCompatibility = '21'
 compileJava.options.encoding = 'UTF-8'
 
 javapackager {
 	mainClass = 'io.github.fvarrui.helloworld.Main'
 	additionalResources = [ file('src/main/resources/info.txt') ]
-	bundleJre = true
-	generateInstaller = true
-    vmArgs = ["-Djava.library.path=."]
+	bundleJre = false
+	//generateInstaller = true
+    //vmArgs = ["-Djava.library.path=."]
     administratorRequired = false
 }
 
 task packageForWindows(type: PackageTask, dependsOn: build) {
+	//duplicatesStrategy = DuplicatesStrategy.WARN
 	description = 'Packages the application as a native Windows executable and bundles it in a zipball'
 	platform = 'windows'
 	vmArgs = [
@@ -111,3 +112,8 @@ task packageForAllPlatforms(dependsOn: [ packageForWindows, packageForMac, packa
 	group = 'JavaPackager'
 }
 
+tasks.configureEach {
+    if (it instanceof Copy || it instanceof Zip || it instanceof Tar || it instanceof PackageTask) {
+        it.duplicatesStrategy = DuplicatesStrategy.FAIL
+    }
+}
